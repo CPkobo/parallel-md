@@ -19,20 +19,28 @@ const register = () => {
     )
 }
 
+const autofix = () => {
+    const lineNum = lines.value.length
+    splitter.value = Math.floor(lineNum / 2)
+}
+
 </script>
 
 <template>
-    <a-space direction="vertical" fill>
-        <a-typography>
-            <a-typography-title>Paste Original Text</a-typography-title>
-        </a-typography>
-        <a-textarea v-model="original" placeholder="Paste here"></a-textarea>
-        <a-space>
-            <a-typography-text>Select where the translations starts: </a-typography-text>
-            <a-select placeholder="Please select the start of translations" v-model="splitter">
-                <a-option v-for="line, lx in lines" :value="lx" :key="'line-' + lx">{{ line }}</a-option>
-            </a-select>
-            <a-button @click="register" type="primary">SPLIT</a-button>
+    <a-card>
+        <a-space direction="vertical" fill>
+            <a-typography>
+                <a-typography-title>Paste Original Text</a-typography-title>
+            </a-typography>
+            <a-textarea v-model="original" placeholder="Paste here" @change="autofix"></a-textarea>
+            <a-space>
+                <a-typography-text>Select where the translations start: </a-typography-text>
+                <a-select placeholder="Please select the start of translations" v-model="splitter" allow-search>
+                    <a-option v-for="line, lx in lines" :value="lx" :key="'line-' + lx">{{ line.substring(0, 25) }}
+                    </a-option>
+                </a-select>
+                <a-button @click="register" type="primary">SPLIT</a-button>
+            </a-space>
         </a-space>
-    </a-space>
+    </a-card>
 </template>

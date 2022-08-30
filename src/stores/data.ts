@@ -1,15 +1,17 @@
 import { defineStore } from "pinia";
-import { marked } from 'marked'
 import type { TableData } from '@arco-design/web-vue'
+import { qaNum } from '@/qa/qaNums'
 
 interface SrcTgtState {
     srcs: string[];
     tgts: string[];
+    qas: QaResultInfo[][];
 }
 
 const data: SrcTgtState = {
     srcs: [],
-    tgts: []
+    tgts: [],
+    qas: [],
 }
 
 export const useSrcTgt = defineStore('srctgt', {
@@ -18,6 +20,21 @@ export const useSrcTgt = defineStore('srctgt', {
         setData(srcs: string[], tgts: string[]) {
             this.srcs = srcs
             this.tgts = tgts
+            this.qas.length = 0
+        },
+        execQa() {
+            const longer = Math.max(this.srcs.length, this.tgts.length)
+            for (let i = 0; i < longer; i++) {
+                const src = this.srcs[i] || ''
+                const tgt = this.tgts[i] || ''
+                qaNum(src, tgt)
+                    .then(result => {
+                        this.qas.push(result)
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+            }
         }
     },
     getters: {
@@ -27,9 +44,14 @@ export const useSrcTgt = defineStore('srctgt', {
             for (let i = 0; i < longer; i++) {
                 const src = state.srcs[i] || ''
                 const tgt = state.tgts[i] || ''
-                tableData.push({ key: `${i}`, src, tgt })
+                const qas = state.qas[i] || []
+                const qa: string[] = []
+                qas.forEach(q => {
+                    qa.push(`${q.sInfo} vs ${q.tInfo}`)
+                })
+                tableData.push({ key: `${i}`, src, tgt, qa })
             }
             return tableData
         }
-    }
+    },
 })

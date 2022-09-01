@@ -56,7 +56,9 @@ const closeDrawer = () => {
                 <a-textarea v-model="original" placeholder="Paste here" disabled v-else />
             </a-col>
             <a-col :span="2" :offset="1">
-                <a-button type="dashed" @click="() => { isShow = !isShow }">{{ showButton }}</a-button>
+                <a-affix :offsetTop="80">
+                    <a-button type="dashed" @click="() => { isShow = !isShow }">{{ showButton }}</a-button>
+                </a-affix>
             </a-col>
         </a-row>
         <a-space direction="vertical">

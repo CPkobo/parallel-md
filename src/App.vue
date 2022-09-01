@@ -2,7 +2,9 @@
   <div id="appbody" :class="{ 'darkmode': views.isDark }">
     <a-layout>
       <a-layout-sider :collapsed="true" :style="{ 'height': '100%' }">
-        <SideNav />
+        <a-affix :offsetTop="0">
+          <SideNav />
+        </a-affix>
       </a-layout-sider>
       <a-layout-content>
         <!-- <InputOriginal /> -->

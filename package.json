@@ -1,6 +1,6 @@
 {
-  "name": "parallel-md",
-  "version": "0.1.0",
+  "name": "INSTANT-CAT",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,7 +8,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@types/codemirror": "^5.60.5",
     "@types/marked": "^4.0.6",
+    "codemirror-editor-vue3": "^2.1.7",
     "core-js": "^3.8.3",
     "marked": "^4.0.19",
     "pinia": "^2.0.21",

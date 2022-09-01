@@ -3,24 +3,56 @@ import type { TableData } from '@arco-design/web-vue'
 import { qaNum } from '@/qa/qaNums'
 
 interface SrcTgtState {
+    src: string;
+    tgt: string;
+    esrc: string;
+    etgt: string;
     srcs: string[];
     tgts: string[];
     qas: QaResultInfo[][];
+    sline: number;
+    tline: number;
+    isInSrc: boolean
 }
 
 const data: SrcTgtState = {
+    src: '',
+    tgt: '',
+    esrc: '',
+    etgt: '',
     srcs: [],
     tgts: [],
     qas: [],
+    sline: 0,
+    tline: 0,
+    isInSrc: true
 }
 
 export const useSrcTgt = defineStore('srctgt', {
     state: () => data,
     actions: {
         setData(srcs: string[], tgts: string[]) {
-            this.srcs = srcs
-            this.tgts = tgts
+            this.srcs = srcs.filter(val => {
+                const v = val.replaceAll(' ', '')
+                return v !== ''
+            })
+            this.tgts = tgts.filter(val => {
+                const v = val.replaceAll(' ', '')
+                return v !== ''
+            })
+            this.src = this.srcs.join('\n')
+            this.tgt = this.tgts.join('\n')
+            this.esrc = this.src
+            this.etgt = this.tgt
             this.qas.length = 0
+        },
+        setText(text: string, isSrc: boolean) {
+            if (isSrc) {
+                this.esrc = text
+            }
+            else {
+                this.etgt = text
+            }
         },
         execQa() {
             const longer = Math.max(this.srcs.length, this.tgts.length)
@@ -35,6 +67,19 @@ export const useSrcTgt = defineStore('srctgt', {
                         console.log(e)
                     })
             }
+        },
+        setAnotherLine(line: number, isSrc: boolean) {
+            this.isInSrc = isSrc
+            if (isSrc) {
+                this.tline = line
+            }
+            else {
+                this.sline = line
+            }
+        },
+        resplit() {
+            this.srcs = this.esrc.split('\n')
+            this.tgts = this.etgt.split('\n')
         }
     },
     getters: {

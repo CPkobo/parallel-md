@@ -40,8 +40,8 @@ const downloadCSV = () => {
     const longer = Math.max(srcs.length, tgts.length)
     const csv: string[] = []
     for (let i = 0; i < longer; i++) {
-        const src = srcs[i] || ''
-        const tgt = tgts[i] || ''
+        const src = srcs[i].trim() || ''
+        const tgt = tgts[i].trim() || ''
         csv.push(`"${src}", "${tgt}"`)
     }
     const file = new Blob([csv.join('\n')])
